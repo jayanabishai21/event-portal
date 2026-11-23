@@ -1,15 +1,18 @@
 import Link from "next/link";
 import { createEvent } from "./actions";
+import { requireAdmin } from "@/lib/session";
 
 const inputClass = "w-full border rounded px-3 py-2";
 
-export default function NewEventPage() {
+export default async function NewEventPage() {
+    await requireAdmin();
+
   return (
     <main className="max-w-xl mx-auto p-6">
       <Link href="/" className="text-blue-600 text-sm">
         ← Back to events
       </Link>
-
+        ...
       <h1 className="text-3xl font-bold mt-4 mb-6">Create Event</h1>
 
       <form action={createEvent} className="space-y-4">

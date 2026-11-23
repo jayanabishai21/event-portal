@@ -3,15 +3,18 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
+import { requireAdmin } from "@/lib/session";
 
 export async function createEvent(formData: FormData) {
+    await requireAdmin();
+
   const title = String(formData.get("title") ?? "").trim();
   const description = String(formData.get("description") ?? "").trim();
   const location = String(formData.get("location") ?? "").trim();
   const category = String(formData.get("category") ?? "").trim();
   const date = String(formData.get("date") ?? "");
   const seats = Number(formData.get("seats"));
-
+    
   if (
     !title ||
     !description ||
