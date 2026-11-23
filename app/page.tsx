@@ -1,43 +1,34 @@
 import Link from "next/link";
-import { events } from "@/lib/events";
+import { prisma } from "@/lib/prisma";
 
-export default function Home() {
+
+export default async function Home() {
+  const events = await prisma.event.findMany({ orderBy: { date: "asc" } });
+
   return (
-    <main style={{ maxWidth: 900, margin: "0 auto", padding: "2rem" }}>
-      <h1 style={{ fontSize: "2rem", fontWeight: 700, marginBottom: "0.5rem" }}>
-        Upcoming Events
-      </h1>
-      <p style={{ color: "#9ca3af", marginBottom: "2rem" }}>
-        Pick an event to see the details.
-      </p>
+    <main className="max-w-5xl mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-2">Upcoming Events</h1>
+      <p className="text-gray-600 mb-6">Find an event and register.</p>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
-          gap: "1.25rem",
-        }}
-      >
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {events.map((event) => (
           <Link
             key={event.id}
             href={`/events/${event.id}`}
-            style={{
-              display: "block",
-              padding: "1.25rem",
-              border: "1px solid #333",
-              borderRadius: 12,
-              textDecoration: "none",
-              color: "inherit",
-            }}
+            className="border rounded-lg p-4 hover:shadow-md transition"
           >
-            <h2 style={{ fontSize: "1.25rem", fontWeight: 600 }}>
-              {event.title}
-            </h2>
-            <p style={{ color: "#9ca3af", margin: "0.5rem 0" }}>
-              {event.date} · {event.location}
+            <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">
+              {event.category}
+            </span>
+            <h2 className="text-xl font-semibold mt-3">{event.title}</h2>
+            <p className="text-sm text-gray-600 mt-1">
+              {event.date.toLocaleDateString("en-IN", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              })}
             </p>
-            <p style={{ fontSize: "0.9rem" }}>{event.description}</p>
+            <p className="text-sm text-gray-600">{event.location}</p>
           </Link>
         ))}
       </div>
