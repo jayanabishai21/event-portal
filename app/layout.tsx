@@ -22,6 +22,9 @@ export default function RootLayout({
           <Link href="/" className="text-gray-600">
             Events
           </Link>
+          <Link href="/admin/events/new" className="text-gray-600">
+            Create Event
+          </Link>
         </nav>
         {children}
       </body>
